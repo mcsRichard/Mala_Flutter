@@ -663,9 +663,14 @@ class _GroupItem extends StatelessWidget {
               ),
             ),
             Text(
-              '${status.myTodayValue}',
+              status.group.targetType == Group.typeTotal && status.myTargetValue > 0
+                  ? '${status.myTotal} / ${status.myTargetValue}'
+                  : status.myDoneToday
+                      ? '已打卡'
+                      : '未打卡',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: cs.onSurfaceVariant,
+                    color: status.myDoneToday ? cs.primary : cs.onSurfaceVariant,
+                    fontWeight: status.myDoneToday ? FontWeight.bold : FontWeight.normal,
                   ),
             ),
           ],

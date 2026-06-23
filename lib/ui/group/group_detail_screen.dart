@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:share_plus/share_plus.dart';
 import '../../data/models/group.dart';
 import '../../data/repositories/group_repository.dart';
 
@@ -133,13 +134,14 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
   }
 
   Future<void> _shareGroup() async {
+    final g = _group;
+    if (g == null) return;
     final url = 'https://mcsrichard.github.io/Mala/join.html?code=${widget.groupId}';
-    await Clipboard.setData(ClipboardData(text: url));
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('邀请链接已复制到剪贴板')),
-      );
-    }
+    final targetLabel = g.targetType == Group.typeCheckin ? '每日打卡' : '个人总目标';
+    final text = '邀请你加入共修小组「${g.name}」\n'
+        '功课：${g.practiceName}（$targetLabel）\n\n'
+        '点击链接加入：$url';
+    await Share.share(text);
   }
 
   Future<void> _confirmLeaveOrDelete() async {

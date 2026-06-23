@@ -48,9 +48,21 @@ app.*.map.json
 /android/app/google-services.json
 /ios/Runner/GoogleService-Info.plist
 GoogleService-Info.plist
+lib/firebase_options.dart
 
 # Temp files
 12.0.0-0
+
+# iOS signing files - never commit these
+*.p12
+*.p8
+*.cer
+*.pem
+*.key
+*.csr
+*.mobileprovision
+*_base64.txt
+*_content.txt
 
 # Build reports
 android/build/
