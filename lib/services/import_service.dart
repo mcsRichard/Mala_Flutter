@@ -15,7 +15,7 @@ class ImportResult {
 
 class ImportService {
   static Future<String?> pickCsvFile() async {
-    final result = await FilePicker.platform.pickFiles(
+    final result = await FilePicker.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['csv', 'txt'],
       allowMultiple: false,
