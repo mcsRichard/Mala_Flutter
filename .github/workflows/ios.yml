@@ -85,8 +85,20 @@ jobs:
 
       - name: Build IPA
         run: |
-          flutter build ipa --release \
-            --export-options-plist=ios/ExportOptions.plist
+          flutter build ios --release --no-codesign
+          xcodebuild -workspace ios/Runner.xcworkspace \
+            -scheme Runner \
+            -configuration Release \
+            -archivePath build/ios/archive/Runner.xcarchive \
+            archive \
+            CODE_SIGN_STYLE=Manual \
+            CODE_SIGN_IDENTITY="Apple Distribution" \
+            PROVISIONING_PROFILE_SPECIFIER="Mala_AppStore" \
+            DEVELOPMENT_TEAM=L6AG249WQ9
+          xcodebuild -exportArchive \
+            -archivePath build/ios/archive/Runner.xcarchive \
+            -exportPath build/ios/ipa \
+            -exportOptionsPlist ios/ExportOptions.plist
 
       - name: Upload to TestFlight
         env:
