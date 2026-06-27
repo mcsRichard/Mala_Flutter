@@ -60,6 +60,12 @@
 			</array>
 		</dict>
 	</array>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>需要访问相册以选择头像或导入图片</string>
+	<key>NSCameraUsageDescription</key>
+	<string>需要访问相机以拍摄头像照片</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>部分功能可能需要位置信息</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
