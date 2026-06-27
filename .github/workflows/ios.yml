@@ -11,8 +11,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Select Xcode 26
-        run: sudo xcode-select -s /Applications/Xcode_26.0.app/Contents/Developer
+      - name: Select Xcode and install iOS platform
+        run: |
+          echo "=== Available Xcode ==="
+          ls /Applications/ | grep -i xcode || true
+          LATEST_XCODE=$(ls /Applications/ | grep -E "^Xcode[_.]?[0-9]" | sort -V | tail -1)
+          if [ -z "$LATEST_XCODE" ]; then LATEST_XCODE="Xcode.app"; fi
+          echo "Using: $LATEST_XCODE"
+          sudo xcode-select -s "/Applications/$LATEST_XCODE/Contents/Developer"
+          echo "=== Xcode version ==="
+          xcodebuild -version
+          echo "=== Downloading iOS platform ==="
+          sudo xcodebuild -downloadPlatform iOS || true
+          echo "=== Available SDKs ==="
+          xcodebuild -showsdks 2>/dev/null | grep -i ios || true
 
       - name: Setup GoogleService-Info.plist
         env:
