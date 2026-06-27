@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +8,26 @@ import 'services/reminder_service.dart';
 import 'ui/auth/auth_screen.dart';
 import 'ui/main_screen.dart';
 
-void main() async {
+void main() {
+  runZonedGuarded(_init, (error, stack) {
+    runApp(MaterialApp(
+      home: Scaffold(
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: SelectableText(
+              'Startup error:\n$error\n\n$stack',
+              style: const TextStyle(fontSize: 12, color: Colors.red),
+            ),
+          ),
+        ),
+      ),
+    ));
+  });
+}
+
+Future<void> _init() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting('zh_CN', null);
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
