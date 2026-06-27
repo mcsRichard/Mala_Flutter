@@ -16,6 +16,7 @@ class GroupDetailScreen extends StatefulWidget {
 class _GroupDetailScreenState extends State<GroupDetailScreen> {
   final _repo = GroupRepository();
   final _uid = FirebaseAuth.instance.currentUser?.uid ?? '';
+  final _shareKey = GlobalKey();
 
   Group? _group;
   List<GroupMember> _members = [];
@@ -141,7 +142,11 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
     final text = '邀请你加入共修小组「${g.name}」\n'
         '功课：${g.practiceName}（$targetLabel）\n\n'
         '点击链接加入：$url';
-    await Share.share(text);
+    final box = _shareKey.currentContext?.findRenderObject() as RenderBox?;
+    final origin = box == null
+        ? null
+        : box.localToGlobal(Offset.zero) & box.size;
+    await Share.share(text, sharePositionOrigin: origin);
   }
 
   Future<void> _confirmLeaveOrDelete() async {
@@ -182,7 +187,7 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
       appBar: AppBar(
         title: Text(g?.name ?? '小组详情'),
         actions: [
-          IconButton(icon: const Icon(Icons.share), onPressed: _shareGroup, tooltip: '分享'),
+          IconButton(key: _shareKey, icon: const Icon(Icons.share), onPressed: _shareGroup, tooltip: '分享'),
           if (_isAdmin && isCheckin)
             IconButton(icon: const Icon(Icons.edit), onPressed: _showEditGoalDialog, tooltip: '修改目标'),
           IconButton(icon: const Icon(Icons.refresh), onPressed: _refresh, tooltip: '刷新'),
