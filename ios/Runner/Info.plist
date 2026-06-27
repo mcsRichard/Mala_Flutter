@@ -60,6 +60,8 @@
 			</array>
 		</dict>
 	</array>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>需要访问相册以选择头像或导入图片</string>
 	<key>NSCameraUsageDescription</key>
