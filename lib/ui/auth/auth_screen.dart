@@ -49,6 +49,27 @@ class _AuthScreenState extends State<AuthScreen> {
     }
   }
 
+  Future<void> _resetPassword() async {
+    final email = _emailCtrl.text.trim();
+    if (email.isEmpty || !email.contains('@')) {
+      setState(() => _error = '请先填写邮箱地址');
+      return;
+    }
+    setState(() { _loading = true; _error = null; });
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('重置邮件已发送，请查收邮箱')),
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      setState(() => _error = _authError(e.code));
+    } finally {
+      if (mounted) setState(() => _loading = false);
+    }
+  }
+
   String _authError(String code) => switch (code) {
     'user-not-found' => '账号不存在',
     'wrong-password' => '密码错误',
@@ -147,6 +168,11 @@ class _AuthScreenState extends State<AuthScreen> {
                         setState(() { _isLogin = !_isLogin; _error = null; }),
                     child: Text(_isLogin ? '没有账号？点击注册' : '已有账号？点击登录'),
                   ),
+                  if (_isLogin)
+                    TextButton(
+                      onPressed: _loading ? null : _resetPassword,
+                      child: const Text('忘记密码？'),
+                    ),
                 ],
               ),
             ),
